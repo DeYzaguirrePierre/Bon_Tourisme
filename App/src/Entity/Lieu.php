@@ -2,45 +2,59 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\LieuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['lieu:read']],
+    denormalizationContext: ['groups' => ['lieu:write']]
+)]
 #[ORM\Entity(repositoryClass: LieuRepository::class)]
 class Lieu
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['lieu:read', 'avis:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['lieu:read', 'lieu:write', 'avis:read'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['lieu:read', 'lieu:write'])]
     private ?string $image = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['lieu:read', 'lieu:write'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 3, scale: 2)]
+    #[Groups(['lieu:read', 'lieu:write'])]
     private ?string $moy_avis = '0';
 
     #[ORM\Column]
+    #[Groups(['lieu:read', 'lieu:write'])]
     private ?int $nb_avis = 0;
 
     /**
      * @var Collection<int, TypeLieu>
      */
     #[ORM\ManyToMany(targetEntity: TypeLieu::class, inversedBy: 'lieu')]
+    #[Groups(['lieu:read', 'lieu:write'])]
     private Collection $type_lieu;
 
     /**
      * @var Collection<int, Avis>
      */
     #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'lieu')]
+    #[Groups(['lieu:read'])]
     private Collection $avis;
 
     public function __construct()
@@ -113,11 +127,6 @@ class Lieu
 
         return $this;
     }
-    // public function __toString(): string
-    // {
-
-    //     return $this->getId();
-    // }
 
     public function __toString(): string
     {

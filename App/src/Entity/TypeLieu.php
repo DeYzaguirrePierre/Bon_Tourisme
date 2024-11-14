@@ -2,26 +2,32 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TypeLieuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['type_lieu:read']],
+    denormalizationContext: ['groups' => ['type_lieu:write']]
+)]
 #[ORM\Entity(repositoryClass: TypeLieuRepository::class)]
 class TypeLieu
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['type_lieu:read', 'lieu:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    #[Groups(['type_lieu:read', 'type_lieu:write', 'lieu:read'])]
+    private ?string $nom = null;
 
-    /**
-     * @var Collection<int, Lieu>
-     */
     #[ORM\ManyToMany(targetEntity: Lieu::class, mappedBy: 'type_lieu')]
+    #[Groups(['type_lieu:read'])]
     private Collection $lieu;
 
     public function __construct()
@@ -34,21 +40,18 @@ class TypeLieu
         return $this->id;
     }
 
-    public function getType(): ?string
+    public function getNom(): ?string
     {
-        return $this->type;
+        return $this->nom;
     }
 
-    public function setType(string $type): static
+    public function setNom(string $nom): static
     {
-        $this->type = $type;
+        $this->nom = $nom;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Lieu>
-     */
     public function getLieu(): Collection
     {
         return $this->lieu;
@@ -71,10 +74,5 @@ class TypeLieu
         }
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->type ?? '';
     }
 }

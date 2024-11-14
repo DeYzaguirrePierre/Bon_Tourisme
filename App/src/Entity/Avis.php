@@ -2,54 +2,54 @@
 
 namespace App\Entity;
 
-use App\Repository\AvisRepository;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AvisRepository;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['avis:read']],
+    denormalizationContext: ['groups' => ['avis:write']]
+)]
 #[ORM\Entity(repositoryClass: AvisRepository::class)]
 class Avis
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['avis:read', 'lieu:read', 'user:read'])]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $niv_avis = 0;
+    #[ORM\ManyToOne(targetEntity: Lieu::class, inversedBy: 'avis')]
+    #[Groups(['avis:read', 'avis:write'])]
+    private ?Lieu $lieu = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $com_avis = null;
-
-    #[ORM\ManyToOne(inversedBy: 'avis')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'avis')]
+    #[Groups(['avis:read', 'avis:write'])]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'avis')]
-    private ?Lieu $lieu = null;
+    #[ORM\Column(type: 'text')]
+    #[Groups(['avis:read', 'avis:write'])]
+    private ?string $commentaire = null;
+
+    #[ORM\Column]
+    #[Groups(['avis:read', 'avis:write'])]
+    private ?int $note = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNivAvis(): ?int
+    public function getLieu(): ?Lieu
     {
-        return $this->niv_avis;
+        return $this->lieu;
     }
 
-    public function setNivAvis(int $niv_avis): static
+    public function setLieu(?Lieu $lieu): static
     {
-        $this->niv_avis = $niv_avis;
-
-        return $this;
-    }
-
-    public function getComAvis(): ?string
-    {
-        return $this->com_avis;
-    }
-
-    public function setComAvis(string $com_avis): static
-    {
-        $this->com_avis = $com_avis;
+        $this->lieu = $lieu;
 
         return $this;
     }
@@ -66,14 +66,26 @@ class Avis
         return $this;
     }
 
-    public function getLieu(): ?Lieu
+    public function getCommentaire(): ?string
     {
-        return $this->lieu;
+        return $this->commentaire;
     }
 
-    public function setLieu(?Lieu $lieu): static
+    public function setCommentaire(string $commentaire): static
     {
-        $this->lieu = $lieu;
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getNote(): ?int
+    {
+        return $this->note;
+    }
+
+    public function setNote(int $note): static
+    {
+        $this->note = $note;
 
         return $this;
     }
