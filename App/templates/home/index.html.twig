@@ -1,0 +1,10 @@
+{# templates/your_page.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section>
+        {% include 'component/lieu_culturel.html.twig' %}
+        {% include 'component/lieu_naturel.html.twig' %}
+        {% include 'component/VIP.html.twig' %}
+    </section>
+{% endblock %}

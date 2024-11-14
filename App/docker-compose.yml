@@ -1,0 +1,41 @@
+# version: "4.3"
+
+services:
+  db:
+    image: mysql:latest
+    container_name: mysql_fl
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: bon_tourisme_db
+      MYSQL_USER: user_name
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "3305:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_fl
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - 8085:80
+    depends_on:
+      - db
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php_apache_fl
+    depends_on:
+      - db
+    ports:
+      - 85:80
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog_fl
+    ports:
+      - "1055:1025"
+      - "8055:8025"

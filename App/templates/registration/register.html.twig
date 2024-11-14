@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col items-center mt-5">
+        <div class="w-full max-w-md px-8 py-6 bg-[#763538] text-white shadow-lg rounded-lg">
+            <h1 class="text-xl font-semibold text-center mb-6">Inscription</h1>
+
+            {{ form_errors(registrationForm) }}
+
+            {{ form_start(registrationForm) }}
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.nom, 'Nom', {'label_attr': {'class': 'block text-sm font-medium text-white'}}) }}
+                    {{ form_widget(registrationForm.nom, {'attr': {'class': 'mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm text-[#763538] focus:outline-none focus:ring-white focus:border-white'}}) }}
+                    {{ form_errors(registrationForm.nom) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.prenom, 'Prénom', {'label_attr': {'class': 'block text-sm font-medium text-white'}}) }}
+                    {{ form_widget(registrationForm.prenom, {'attr': {'class': 'mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm text-[#763538] focus:outline-none focus:ring-white focus:border-white'}}) }}
+                    {{ form_errors(registrationForm.prenom) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.date_naissance, 'Date de naissance', {'label_attr': {'class': 'block text-sm font-medium text-white'}}) }}
+                    {{ form_widget(registrationForm.date_naissance, {'attr': {'class': 'mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm text-[#763538] focus:outline-none focus:ring-white focus:border-white'}}) }}
+                    {{ form_errors(registrationForm.date_naissance) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'block text-sm font-medium text-white'}}) }}
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm text-[#763538] focus:outline-none focus:ring-white focus:border-white'}}) }}
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'block text-sm font-medium text-white'}}) }}
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm text-[#763538] focus:outline-none focus:ring-white focus:border-white'}}) }}
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+
+                <div class="mb-4 flex items-center">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'h-4 w-4 text-[#763538] border-gray-300 rounded focus:ring-white'}}) }}
+                    {{ form_label(registrationForm.agreeTerms, 'Accepter les conditions d\'utilisations', {'label_attr': {'class': 'ml-2 block text-sm text-white'}}) }}
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+
+                <button type="submit" class="w-full py-2 px-4 bg-white text-[#763538] font-medium border border-white rounded-md hover:bg-[#9b4545] hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+                    S'inscrire
+                </button>
+            {{ form_end(registrationForm) }}
+
+            <p class="mt-6 text-center text-sm text-gray-200">
+                Déjà inscrit ? 
+                <a href="{{ path('app_login') }}" class="text-white underline">Se connecter</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

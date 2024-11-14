@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connection{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col items-center mt-5">
+        {% for message in app.flashes('success') %}
+            <div class="mb-4 text-center text-white bg-green-500 p-2 rounded-lg">
+                {{ message }}
+            </div>
+        {% endfor %}
+        
+        {% for message in app.flashes('danger') %}
+            <div class="mb-4 text-center text-white bg-red-500 p-2 rounded-lg">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="w-full max-w-md px-8 py-6 bg-[#763538] text-white shadow-lg rounded-lg">
+            {% if error %}
+                <div class="mb-4 text-center text-white">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-4 text-center">
+                    Vous êtes connecté en tant que <span class="font-semibold">{{ app.user.userIdentifier }}</span>, 
+                    <a href="{{ path('app_logout') }}" class="text-white underline">Se déconnecter</a>
+                </div>
+            {% endif %}
+
+            <h1 class="text-xl font-semibold text-center mb-6">Veuillez vous connecter</h1>
+
+            <form method="post">
+                <div class="mb-4">
+                    <label for="inputEmail" class="block text-sm font-medium text-white">Email</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" 
+                           class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm text-[#763538] focus:outline-none focus:ring-white focus:border-white" 
+                           autocomplete="email" required autofocus>
+                </div>
+
+                <div class="mb-4">
+                    <label for="inputPassword" class="block text-sm font-medium text-white">Mot de passe</label>
+                    <input type="password" name="password" id="inputPassword" 
+                           class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm text-[#763538] focus:outline-none focus:ring-white focus:border-white" 
+                           autocomplete="current-password" required>
+                    <p><a class="text-sm underline" href="{{ path('app_forgotten_password') }}">Mot de passe oublié ?</a></p>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="mb-4 flex items-center">
+                    <input type="checkbox" name="_remember_me" id="_remember_me" 
+                           class="h-4 w-4 text-[#763538] border-gray-300 rounded focus:ring-white">
+                    <label for="_remember_me" class="ml-2 block text-sm text-white">Se souvenir de moi</label>
+                </div>
+
+                <button type="submit" class="w-full py-2 px-4 bg-white text-[#763538] font-medium border border-white rounded-md hover:bg-[#9b4545] hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+                    Se connecter
+                </button>
+
+                <p class="mt-6 text-center text-sm text-gray-200">
+                    Pas encore inscrit(e) ? 
+                    <a href="{{ path('app_register') }}" class="text-white underline">S'inscrire</a>
+                </p>
+            </form>
+        </div>
+    </div>
+{% endblock %}
